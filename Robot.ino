@@ -5,7 +5,8 @@ int av1 = 3;
 int ar1 = 4;
 int av2 = 5;
 int ar2 = 6;
-int vitesse = 200;
+int vitesse1 = 190;
+int vitesse2 = 200;
 
 
 int trig1=30;
@@ -51,47 +52,47 @@ void arriere(){
   digitalWrite(av1, HIGH);
   digitalWrite(ar1, LOW);
 
-  analogWrite(pw1, vitesse);
+  analogWrite(pw1, vitesse1);
 
   digitalWrite(av2, HIGH);
   digitalWrite(ar2, LOW);
 
-  analogWrite(pw2, vitesse);
+  analogWrite(pw2, vitesse2);
 }
 
 void gauche(){
   digitalWrite(av1, HIGH);
   digitalWrite(ar1, LOW);
 
-  analogWrite(pw1, vitesse);
+  analogWrite(pw1, vitesse1);
 
   digitalWrite(av2, LOW);
   digitalWrite(ar2, HIGH);
 
-  analogWrite(pw2, vitesse);
+  analogWrite(pw2, vitesse2);
 }
 
 void droite(){
   digitalWrite(av2, HIGH);
   digitalWrite(ar2, LOW);
 
-  analogWrite(pw1, vitesse);
+  analogWrite(pw1, vitesse1);
 
   digitalWrite(av1, LOW);
   digitalWrite(ar1, HIGH);
 
-  analogWrite(pw2, vitesse);
+  analogWrite(pw2, vitesse2);
 }
 void avant(){
   digitalWrite(av1, LOW);
   digitalWrite(ar1, HIGH);
 
-  analogWrite(pw1, vitesse);
+  analogWrite(pw1, vitesse1);
 
   digitalWrite(av2, LOW);
   digitalWrite(ar2, HIGH);
 
-  analogWrite(pw2, vitesse);
+  analogWrite(pw2, vitesse2);
 }
 
 void stop(){
@@ -101,7 +102,6 @@ void stop(){
 
   digitalWrite(av2, LOW);
   digitalWrite(ar2, LOW);
-
 }
 
 float lireDistance(int trigPin, int echoPin) {
@@ -111,22 +111,22 @@ float lireDistance(int trigPin, int echoPin) {
   delayMicroseconds(10);
   digitalWrite(trigPin, LOW);
 
-  int duree = pulseIn(echoPin, HIGH); // timeout 20ms
+  int duree = pulseIn(echoPin, HIGH); 
   return duree * 0.034 / 2;
 }
 
 void jaune(){
   avant();
-  delay(10000);
+  delay(5000);
   stop();
   delay(50);
-  gauche()
+  gauche();
   delay(1000);
   stop();
   delay(50);
   avant();
   delay(1000);
-  stop()
+  stop();
   delay(10);
 
 }
@@ -137,48 +137,17 @@ void bleu(){
   delay(10000);
   stop();
   delay(50);
-  droite()
+  droite();
   delay(1000);
   stop();
   delay(50);
   avant();
   delay(1000);
-  stop()
+  stop();
   delay(10);
 
 }
 
-
-void arret(){
-  distance1 = lireDistance(trig1, echo1);
-  distance2 = lireDistance(trig2, echo2);
-  distance3 = lireDistance(trig3, echo3);
-  distance4 = lireDistance(trig4, echo4);
-
-
-  if ((distance1 >10) && (distance2 > 10))
-  {
-    avant();
-    delay(1000);
-    stop();
-  }
-  else if ((distance1 >10) && (distance2 < 10))
-  {
-    gauche();
-    delay(1000);
-    stop();
-  }
-  else if ((distance1 <10) && distance2 > 10)
-  {
-    droite();
-    delay(1000);
-    stop();
-  }
-  else{
-    stop();
-  }
-
-}
 
 
 void setup()
@@ -202,7 +171,7 @@ void setup()
    pinMode(equipe, INPUT);  
    pinMode(depart, INPUT);
    pinMode(servos1, OUTPUT);  
-   pinMode(servos, OUTPUT);
+   pinMode(servos2, OUTPUT);
    
    Serial.begin(9600);
 
@@ -211,38 +180,25 @@ void setup()
 
 void loop()
 {
-  distance1 = lireDistance(trig1, echo1);
-  distance2 = lireDistance(trig2, echo2);
-  distance3 = lireDistance(trig3, echo3);
-  distance4 = lireDistance(trig4, echo4);
+  if (depart == LOW){
+    distance1 = lireDistance(trig1, echo1);
+    distance2 = lireDistance(trig2, echo2);
+    distance3 = lireDistance(trig3, echo3);
+    distance4 = lireDistance(trig4, echo4);
 
-  Serial.print("Dist1: "); Serial.print(distance1);
-  Serial.print(" | Dist2: "); Serial.print(distance2);
-  Serial.print(" | Dist3: "); Serial.print(distance3);
-  Serial.print(" | Dist4: "); Serial.println(distance4);
-
-  if ((distance1 >10) && (distance2 > 10))
-  {
-    avant();
-    delay(1000);
-    stop();
+    if ((distance3 >10) && (distance4 > 10))
+    {
+      if (equipe == HIGH){
+        jaune();
+      }
+      else{
+        bleu();
+      }
+    }
+    else{
+      stop();
+    }
   }
-  else if ((distance1 >10) && (distance2 < 10))
-  {
-    gauche();
-    delay(1000);
-    stop();
-  }
-  else if ((distance1 <10) && distance2 > 10)
-  {
-    droite();
-    delay(1000);
-    stop();
-  }
-  else{
-    stop();
-  }
-
 }
 
 
