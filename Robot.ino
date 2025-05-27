@@ -117,7 +117,14 @@ float lireDistance(int trigPin, int echoPin) {
 
 void jaune(){
   avant();
-  delay(3000);
+  delay(1000);
+  arret();
+  avant();
+  delay(1000);
+  arret();  
+  avant();
+  delay(1000);
+  arret();
   stop();
   delay(50);
   gauche();
@@ -169,7 +176,7 @@ void setup()
    pinMode(echo4, INPUT); 
 
    pinMode(equipe, INPUT);  
-   pinMode(depart, INPUT);
+   pinMode(depart, INPUT_PULLUP);
    pinMode(servos1, OUTPUT);  
    pinMode(servos2, OUTPUT);
    
@@ -177,14 +184,25 @@ void setup()
 
 }
 
-
-void loop()
-{
-  if (digitalRead(depart) == HIGH){
+void arret (){
+  distance1 = lireDistance(trig1, echo1);
+  distance2 = lireDistance(trig2, echo2);
+  distance3 = lireDistance(trig3, echo3);
+  distance4 = lireDistance(trig4, echo4);
+  while ((distance3 >10) || (distance4 > 10) || (distance2>10) || (distance1 > 10))
+  {
+    stop();
+    delay(100);
     distance1 = lireDistance(trig1, echo1);
     distance2 = lireDistance(trig2, echo2);
     distance3 = lireDistance(trig3, echo3);
     distance4 = lireDistance(trig4, echo4);
+  }
+}
+
+void loop()
+{
+  if (digitalRead(depart) == LOW){
 
     if ((distance3 >10) && (distance4 > 10))
     {
