@@ -34,7 +34,8 @@ float meter4;
 
 int equipe = 10;
 
-int servos = 10;
+int servos1 = 8;
+int servos2 = 9;
 
 int depart = 13;
 
@@ -46,7 +47,7 @@ int blancgauche = 28;
 
 
 
-void avant(){
+void arriere(){
   digitalWrite(av1, HIGH);
   digitalWrite(ar1, LOW);
 
@@ -81,7 +82,7 @@ void droite(){
 
   analogWrite(pw2, vitesse);
 }
-void arriere(){
+void avant(){
   digitalWrite(av1, LOW);
   digitalWrite(ar1, HIGH);
 
@@ -103,6 +104,81 @@ void stop(){
 
 }
 
+float lireDistance(int trigPin, int echoPin) {
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(5);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  int duree = pulseIn(echoPin, HIGH); // timeout 20ms
+  return duree * 0.034 / 2;
+}
+
+void jaune(){
+  avant();
+  delay(10000);
+  stop();
+  delay(50);
+  gauche()
+  delay(1000);
+  stop();
+  delay(50);
+  avant();
+  delay(1000);
+  stop()
+  delay(10);
+
+}
+
+
+void bleu(){
+  avant();
+  delay(10000);
+  stop();
+  delay(50);
+  droite()
+  delay(1000);
+  stop();
+  delay(50);
+  avant();
+  delay(1000);
+  stop()
+  delay(10);
+
+}
+
+
+void arret(){
+  distance1 = lireDistance(trig1, echo1);
+  distance2 = lireDistance(trig2, echo2);
+  distance3 = lireDistance(trig3, echo3);
+  distance4 = lireDistance(trig4, echo4);
+
+
+  if ((distance1 >10) && (distance2 > 10))
+  {
+    avant();
+    delay(1000);
+    stop();
+  }
+  else if ((distance1 >10) && (distance2 < 10))
+  {
+    gauche();
+    delay(1000);
+    stop();
+  }
+  else if ((distance1 <10) && distance2 > 10)
+  {
+    droite();
+    delay(1000);
+    stop();
+  }
+  else{
+    stop();
+  }
+
+}
 
 
 void setup()
@@ -122,25 +198,16 @@ void setup()
    pinMode(echo3, INPUT);
    pinMode(trig4, OUTPUT);  
    pinMode(echo4, INPUT); 
+
+   pinMode(equipe, INPUT);  
+   pinMode(depart, INPUT);
+   pinMode(servos1, OUTPUT);  
+   pinMode(servos, OUTPUT);
    
-    
    Serial.begin(9600);
 
-
-
-
 }
 
-float lireDistance(int trigPin, int echoPin) {
-  digitalWrite(trigPin, LOW);
-  delayMicroseconds(5);
-  digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
-
-  int duree = pulseIn(echoPin, HIGH, 20000); // timeout 20ms
-  return duree * 0.034 / 2;
-}
 
 void loop()
 {
