@@ -5,7 +5,7 @@ int av1 = 3;
 int ar1 = 4;
 int av2 = 5;
 int ar2 = 6;
-int vitesse1 = 190;
+int vitesse1 = 195;
 int vitesse2 = 200;
 
 
@@ -21,7 +21,7 @@ int duree2;
 float distance2;
 float meter2;
 
-int trig3=38;
+int trig3=38; 
 int echo3=40;
 int duree3;
 float distance3;
@@ -117,11 +117,11 @@ float lireDistance(int trigPin, int echoPin) {
 
 void jaune(){
   avant();
-  delay(5000);
+  delay(3000);
   stop();
   delay(50);
   gauche();
-  delay(1000);
+  delay(500);
   stop();
   delay(50);
   avant();
@@ -134,11 +134,11 @@ void jaune(){
 
 void bleu(){
   avant();
-  delay(10000);
+  delay(3000);
   stop();
   delay(50);
   droite();
-  delay(1000);
+  delay(500);
   stop();
   delay(50);
   avant();
@@ -180,7 +180,7 @@ void setup()
 
 void loop()
 {
-  if (depart == LOW){
+  if (digitalRead(depart) == HIGH){
     distance1 = lireDistance(trig1, echo1);
     distance2 = lireDistance(trig2, echo2);
     distance3 = lireDistance(trig3, echo3);
@@ -188,7 +188,7 @@ void loop()
 
     if ((distance3 >10) && (distance4 > 10))
     {
-      if (equipe == HIGH){
+      if (digitalRead(equipe) == HIGH){
         jaune();
       }
       else{
@@ -198,6 +198,9 @@ void loop()
     else{
       stop();
     }
+  }
+  else{
+    delay(50);
   }
 }
 
